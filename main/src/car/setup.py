@@ -20,6 +20,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'camera_service = car.camera_node:main',
+            'lidar_service = car.lidar_node:main',
+            'perception_service = car.perception_node:main',
+            'head_client = car.head:main'
         ],
     },
 )

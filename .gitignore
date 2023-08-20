@@ -1,2 +1,6 @@
 ros2_ws/
 ros2_ws_c/
+
+build/
+install/
+log/
