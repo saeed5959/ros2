@@ -58,7 +58,7 @@ class Head(Node):
         msg = String()
         msg.data = 'Hello World'
         self.publisher_steer.publish(msg)
-        self.get_logger().info('Publishing in steer : "%s"' % msg.data)
+        self.get_logger().info(f'Publishing in steer : {msg.data}')
 
     def timer_callback_velocity(self):
         response_perception = self.send_request_perception(1,2)
@@ -68,7 +68,7 @@ class Head(Node):
         msg = String()
         msg.data = 'Hello World'
         self.publisher_velocity.publish(msg)
-        self.get_logger().info('Publishing in velocity : "%s"' % msg.data)
+        self.get_logger().info(f'Publishing in velocity : {msg.data}')
 
 
 
@@ -77,9 +77,7 @@ def main():
 
     minimal_client = Head()
     response = minimal_client.send_request(int(sys.argv[1]), int(sys.argv[2]))
-    minimal_client.get_logger().info(
-        'Result of add_two_ints: for %d + %d = %d' %
-        (int(sys.argv[1]), int(sys.argv[2]), response.sum))
+    minimal_client.get_logger().info('Result of add_two_ints: for {int(sys.argv[1])} , {int(sys.argv[2])} , {response.sum)}')
 
     minimal_client.destroy_node()
     rclpy.shutdown()

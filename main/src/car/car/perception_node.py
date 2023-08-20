@@ -1,33 +1,32 @@
 import sys
 
-from example_interfaces.srv import AddTwoInts
+from interfaces.srv import PercToCamera
 import rclpy
 from rclpy.node import Node
+from example_interfaces.srv import AddTwoInts
 
 
 class PerceptionToCamera(Node):
 
     def __init__(self):
         super().__init__("perception")
-        self.cli = self.create_client(AddTwoInts, 'camera_perception')
-        self.req = AddTwoInts.Request()
+        self.cli = self.create_client(PercToCamera, 'camera_perception')
+        self.req = PercToCamera.Request()
 
-    def send_request(self, a, b):
-        self.req.a = a
-        self.req.b = b
+    def send_request(self):
+        self.req.m = "hi"
         self.future = self.cli.call_async(self.req)
         rclpy.spin_until_future_complete(self, self.future)
         return self.future.result()
 
 
-def main_1():
+def main():
     rclpy.init()
 
     minimal_client = PerceptionToCamera()
-    response = minimal_client.send_request(int(sys.argv[1]), int(sys.argv[2]))
-    minimal_client.get_logger().info(
-        'Result of add_two_ints: for %d + %d = %d' %
-        (int(sys.argv[1]), int(sys.argv[2]), response.sum))
+    response = minimal_client.send_request()
+    minimal_client.get_logger().info(f'img path : {response.img_path}')
+    
 
     minimal_client.destroy_node()
     rclpy.shutdown()
@@ -67,12 +66,12 @@ class PerceptionService(Node):
         response_lidar = self.send_request_lidar(request.a , request.b)
 
         response.sum = request.a + request.b
-        self.get_logger().info('Incoming request\na: %d b: %d' % (request.a, request.b))
-        self.get_logger().info('Incoming request\na: %d b: %d' % (response_camera.sum, response_lidar.sum))
+        self.get_logger().info(f'Incoming request: {request.a} : {request.b}')
+        self.get_logger().info(f'Incoming request: {response_camera.sum} : {response_lidar.sum}')
 
         return response
 
-def main():
+def main_1():
     rclpy.init()
 
     perception_service = PerceptionService()

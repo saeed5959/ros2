@@ -1,16 +1,16 @@
 import rclpy
 from rclpy.node import Node
 
-from example_interfaces.srv import AddTwoInts
+from interfaces.srv import PercToCamera
 
 class CameraService(Node):
     def __init__(self):
         super().__init__("camera")
-        self.srv = self.create_service(AddTwoInts, "camera_perception", self.camera_callback)
+        self.srv = self.create_service(PercToCamera, "camera_perception", self.camera_callback)
 
     def camera_callback(self,request, response):
-        response.sum = request.a + request.b
-        self.get_logger().info('Incoming request\na: %d b: %d' % (request.a, request.b))
+        response.img_path = "./x.jpg"
+        self.get_logger().info(f'Incoming request : {response.img_path}')
 
         return response
 
